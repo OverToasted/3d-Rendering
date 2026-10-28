@@ -93,14 +93,21 @@ class matrix:
         list2 = []
         list3 = []
         list4 = []
-        for i in range(len(self.__dict__.items())):
+        for i in range(list1['v0'].length):
             list3 = []
-            for j in range(len(list1['v' + str(i)].__dict__.items())):
-                if list1['v' + str(i)].__dict__.get('e'+str(j)) != None:
-                    list3.append(list1['v' + str(i)].__dict__['e'+str(j)])
-                else:
-                    list1['v' + str(i)].__dict__['pose'] = 'column'
+            for j in range(len(self.__dict__.items())):
+                if list1.get('v'+ str(j)) != None:
+                    #print('haiai')
+                    if list1['v' + str(j)].__dict__.get('e'+str(i)) != None:
+                        list3.append(list1['v' + str(j)].__dict__['e'+str(i)])
+                        #print(list3)
+                
+                
+            #(list1['v' + str(j)],'pose','column')
+            #list1['v' + str(j)].__dict__['pose'] = 'column'
+            list3.append('column')
             list4.append(vector(tuple(list3)))
+            #print(list4[0].comp)
         return matrix(tuple(list4))
             
         
@@ -135,15 +142,8 @@ def angle(v,u):
     return m.acos(dot(v,u)/(mag(v)*mag(u)))
 #gives the angle between two vectors
 
-x1v = vector(1,1,0,'row')
+x1v = vector(1,0,0,'row')
 y1v = vector(0,1,0,'row')
 z1v = vector(0,0,1,'row')
 mat = matrix(x1v,y1v,z1v)
-mat1 = matrix((x1v,y1v))
-#print(mat.v0.e0)
-#print(mat.v1.e1)
-#print(mat.v2.e2)
-print(mat1.v0.e1)
-print(mat1.trans().v0.e1)
-#print(mat.comp)
 #gives 1 vectors
