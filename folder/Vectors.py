@@ -32,7 +32,16 @@ class vector:
                     #print('pose' +str(value) +str(args))
                 i += 1
                 #determines if column or row vector
-
+                
+                
+        length = 0
+        for value in args:
+            if type(value) == tuple:
+                length += len(value)
+            else:
+                length += 1  
+        self.length = length
+        
 
         if self.pose != 'row' and self.pose != 'column':
             self.pose = 'row'
@@ -66,39 +75,34 @@ class matrix:
         #alows arbitary num of arguements
         list1 = []
         i = 0
-        vectarg = []
         length = len(args)
         for value in args:
             if type(value) == tuple:
-                vectarg = value
                 length += len(list(value))
                 for index, j in enumerate(list(value)):
-                    if index != len(value) and index + i != length - 1:
-                        setattr(self,'e' + str(index + i),j)
-                        #print('e' + str(index + i) + 'tuple' + str(args))
-                    
+                    setattr(self,'v' + str(index),j)
                 i += len(list(value))
             else:
-                if i != length - 1:
-                    setattr(self,'e' + str(i),value)
-                    #print('e' + str(i) + 'nontuple' + str(args))
+                setattr(self,'v' + str(i),value)
                 i += 1
-                #determines if column or row matrix
                 
-        for j in range(len(self.__dict__.items())):
-            if self.__dict__.get('e' + str(j)) != None:
-                list1.append(self.__dict__['e' + str(j)])
-        list1.append(self.__dict__['pose'])
-        self.comp = list1
-        #defines .comp to give vector as a list
-
-  #  def trans(self):
-       # list1 = self.__dict__
-       # list2 = []
-       # list3 = []
-       # for j in range(len(self.__dict__.items())):
-              # if self.__dict__.get('e' + str(j)) != None:
-                   #list2.append(list1['e' + str(j)])
+        
+                
+    def trans(self):
+        list1 = self.__dict__
+        list2 = []
+        list3 = []
+        list4 = []
+        for i in range(len(self.__dict__.items())):
+            list3 = []
+            for j in range(len(list1['v' + str(i)].__dict__.items())):
+                if list1['v' + str(i)].__dict__.get('e'+str(j)) != None:
+                    list3.append(list1['v' + str(i)].__dict__['e'+str(j)])
+                else:
+                    list1['v' + str(i)].__dict__['pose'] = 'column'
+            list4.append(vector(tuple(list3)))
+        return matrix(tuple(list4))
+            
         
 
 
@@ -117,7 +121,7 @@ def mag(v):
        
 def dot(v,u):
     sumand = 0
-    if v.pose == u.pose and v.pose == 'row:
+    if v.pose == u.pose and v.pose == 'row':
         for i in range(len(v.comp)):
             if v.__dict__.get('e' + str(i)) != None:
                 sumand += v.__dict__['e' + str(i)]*u.__dict__['e' + str(i)]
@@ -131,10 +135,15 @@ def angle(v,u):
     return m.acos(dot(v,u)/(mag(v)*mag(u)))
 #gives the angle between two vectors
 
-x1v = vector(1,0,0)
-y1v = vector(0,1,0)
-z1v = vector(0,0,1)
-mat = matrix(x1v,y1v,z1v,'row')
-print(mat.e1.e1)
-print(mat.comp)
+x1v = vector(1,1,0,'row')
+y1v = vector(0,1,0,'row')
+z1v = vector(0,0,1,'row')
+mat = matrix(x1v,y1v,z1v)
+mat1 = matrix((x1v,y1v))
+#print(mat.v0.e0)
+#print(mat.v1.e1)
+#print(mat.v2.e2)
+print(mat1.v0.e1)
+print(mat1.trans().v0.e1)
+#print(mat.comp)
 #gives 1 vectors
