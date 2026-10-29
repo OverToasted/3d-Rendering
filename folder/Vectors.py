@@ -104,13 +104,8 @@ class matrix:
             list4.append(vector(tuple(list3)))
             #print(list4[0].comp)
         return matrix(tuple(list4))
-            
-        
 
-
-        
-
-
+                      
 
 def mag(v):
     sumand = 0
@@ -138,16 +133,24 @@ def dot(v,u):
                     list1.append(v.__dict__['e' + str(i)] * u.__dict__['e' + str(j)])
                 list1.append('row')
                 list2.append(vector(tuple(list1)))
-                
-            
+                return matrix(tuple(list2))
     else:
         return 'DNE, lengths not equal'
 #gives the dot product
 
+def matrixmult(M,N):
+    list1 = []
+    if M.v0.length == len(N.__dict__.items()):
+        
 
+
+    
 def angle(v,u):
     return m.acos(dot(v,u)/(mag(v)*mag(u)))
 #gives the angle between two vectors
+
+
+
 
 x1v = vector(1,0,0,'row')
 y1v = vector(0,1,0,'row')
