@@ -100,7 +100,7 @@ class matrix:
                     if list1['v' + str(j)].__dict__.get('e'+str(i)) != None:
                         list3.append(list1['v' + str(j)].__dict__['e'+str(i)])
                         #print(list3)
-            list3.append('row')
+            list3.append(self.pose)
             list4.append(vector(tuple(list3)))
             #print(list4[0].comp)
         return matrix(tuple(list4))
@@ -123,13 +123,25 @@ def mag(v):
        
 def dot(v,u):
     sumand = 0
-    if v.pose == u.pose and v.pose == 'row':
-        for i in range(len(v.comp)):
-            if v.__dict__.get('e' + str(i)) != None:
-                sumand += v.__dict__['e' + str(i)]*u.__dict__['e' + str(i)]
-            return sumand
+    list1 = []
+    list2 = []
+    if v.length == u.length:
+        if v.pose == u.pose and v.pose == 'row':
+            for i in range(v.length):
+                if v.__dict__.get('e' + str(i)) != None:
+                    sumand += v.__dict__['e' + str(i)] * u.__dict__['e' + str(i)]
+                return sumand
+        if v.pose == u.pose and v.pose == 'column':
+            for i in range(v.length):
+                list1 = []
+                for j in range(v.length):
+                    list1.append(v.__dict__['e' + str(i)] * u.__dict__['e' + str(j)])
+                list1.append('row')
+                list2.append(vector(tuple(list1)))
+                
+            
     else:
-        return 'DNE, poses do not match'
+        return 'DNE, lengths not equal'
 #gives the dot product
 
 
