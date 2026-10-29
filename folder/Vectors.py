@@ -101,11 +101,7 @@ class matrix:
                     if list1['v' + str(j)].__dict__.get('e'+str(i)) != None:
                         list3.append(list1['v' + str(j)].__dict__['e'+str(i)])
                         #print(list3)
-                
-                
-            #(list1['v' + str(j)],'pose','column')
-            #list1['v' + str(j)].__dict__['pose'] = 'column'
-            list3.append('column')
+            list3.append('row')
             list4.append(vector(tuple(list3)))
             #print(list4[0].comp)
         return matrix(tuple(list4))
