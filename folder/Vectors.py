@@ -87,7 +87,6 @@ class matrix:
                 i += 1
                 
         
-                
     def trans(self):
         list1 = self.__dict__
         list2 = []
