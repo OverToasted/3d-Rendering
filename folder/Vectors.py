@@ -100,7 +100,7 @@ class matrix:
                     if list1['v' + str(j)].__dict__.get('e'+str(i)) != None:
                         list3.append(list1['v' + str(j)].__dict__['e'+str(i)])
                         #print(list3)
-            list3.append(self.pose)
+            list3.append('row')
             list4.append(vector(tuple(list3)))
             #print(list4[0].comp)
         return matrix(tuple(list4))
@@ -140,7 +140,17 @@ def dot(v,u):
 
 def matrixmult(M,N):
     list1 = []
-    if M.v0.length == len(N.__dict__.items()):
+    list2 = []
+    if M.v0.length - 1 == len(N.__dict__.items()):
+        for i in range(len(M.__dict__)):
+            list1 = []
+            for j in range(len(N.__dict__)):
+                list1.append(dot(M.__dict__['v' + str(i)],N.trans().__dict__['v' + str(j)]))
+            list1.append('row')
+            list2.append(vector(tuple(list1)))
+        return matrix(tuple(list2))
+    else:
+        return 'DNE'
         
 
 
@@ -155,5 +165,6 @@ def angle(v,u):
 x1v = vector(1,0,0,'row')
 y1v = vector(0,1,0,'row')
 z1v = vector(0,0,1,'row')
-mat = matrix(x1v,y1v,z1v)
+Unit = matrix(x1v,y1v,z1v)
+
 #gives 1 vectors
