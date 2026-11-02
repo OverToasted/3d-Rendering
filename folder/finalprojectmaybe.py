@@ -1,8 +1,10 @@
 import math as m
 import tkinter as tk
-import Vectors
+import Vectors as v
 import pynput as pt
 import turtle as tt
+
+ObjectFile = open('PythonProjectData.txt')
 
 turt = tt.Turtle()
 
@@ -13,5 +15,7 @@ turt = tt.Turtle()
 #Def Angles(v):  
     #ang = vector(0,0,0)
     #for 
-CamPos = vector(0,0,0)
+CamPos = v.vector(0,0,0)
+CamPoint = v.vector(90,0,0)#vector contains cam angles relative to [1,1,1]
 CamFOV = 45 #degrees
+
