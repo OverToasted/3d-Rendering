@@ -138,6 +138,7 @@ def dot(v,u):
         return 'DNE, lengths not equal'
 #gives the dot product
 
+
 def matrixmult(M,N):
     list1 = []
     list2 = []
@@ -151,9 +152,8 @@ def matrixmult(M,N):
         return matrix(tuple(list2))
     else:
         return 'DNE'
+    #multiplies two matrixes
         
-
-
     
 def angle(v,u):
     return m.acos(dot(v,u)/(mag(v)*mag(u)))
@@ -161,10 +161,8 @@ def angle(v,u):
 
 
 
-
 x1v = vector(1,0,0,'row')
 y1v = vector(0,1,0,'row')
 z1v = vector(0,0,1,'row')
 Unit = matrix(x1v,y1v,z1v)
-
 #gives 1 vectors
