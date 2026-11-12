@@ -165,19 +165,21 @@ def angle(v,u):
 def add(v,u):
     list1 = []
     list2 = []
-    if type(v) == 'vector' and type(u) == 'vector':
+    if type(v) == vector and type(u) == vector:
         if v.length != u.length:
             return 'DNE lengths differ'
-        for i in range(v.__dict__):
+        for i in range(len(v.__dict__)-3):
             list1.append(v.__dict__['e' + str(i)] + u.__dict__['e' + str(i)])
+        list1.append(v.pose)
         return vector(tuple(list1))
-    elif type(v) == 'matrix' and type(u) == 'matrix':
+    elif type(v) == matrix and type(u) == matrix:
         if v.dimension != u.dimension:
             return 'DNE dimensions differ'
-        for i in range(v.__dict__):
+        for i in range(len(v.__dict__)-3):
             list1 =[]
-            for j in range(v.v0.__dict__):
+            for j in range(len(v.v0.__dict__)-1):
                 list1.append(v.__dict__['v' + str(i)].__dict__['e' + str(j)] + u.__dict__['v' + str(i)].__dict__['e' + str(j)])
+            list1.append(v.pose)
             list2.append(vector(tuple(list1)))
         return matrix(tuple(list2))
     else:
@@ -187,12 +189,13 @@ def add(v,u):
 def scalarmult(s,v):
     list1 = []
     list2 = []
-    if type(v) == 'vector' and (type(s) == 'int' or type(s) == 'float'):
-        for i in range(v.__dict__):
+    if type(v) == vector and (type(s) == int or type(s) == float):
+        for i in range(len(v.__dict__)-3):
             list1.append(s * v.__dict__['e' + str(i)])
+        list1.append(v.__dict__['pose'])
         return vector(tuple(list1))
-    elif type(v) == 'matrix' and (type(s) == 'int' or type(s) == 'float'):
-        for i in range(v.__dict__):
+    elif type(v) == matrix and (type(s) == int or type(s) == float):
+        for i in range(len(v.__dict__)-1):
             list1 =[]
             for j in range(v.v0.__dict__):
                 list1.append(s * v.__dict__['v' + str(i)].__dict__['e' + str(j)])
