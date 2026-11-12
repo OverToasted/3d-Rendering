@@ -86,6 +86,8 @@ class matrix:
                 setattr(self,'v' + str(i),value)
                 i += 1
                 
+        self.dimension = [len(self.__dict__), len(self.v0.__dict__)]      
+        #gives the matrix dimensions as a list
         
     def trans(self):
         list1 = self.__dict__
@@ -104,7 +106,7 @@ class matrix:
             list4.append(vector(tuple(list3)))
             #print(list4[0].comp)
         return matrix(tuple(list4))
-
+    
                       
 
 def mag(v):
@@ -158,6 +160,55 @@ def matrixmult(M,N):
 def angle(v,u):
     return m.acos(dot(v,u)/(mag(v)*mag(u)))
 #gives the angle between two vectors
+
+
+def add(v,u):
+    list1 = []
+    list2 = []
+    if type(v) == 'vector' and type(u) == 'vector':
+        if v.length != u.length:
+            return 'DNE lengths differ'
+        for i in range(v.__dict__):
+            list1.append(v.__dict__['e' + str(i)] + u.__dict__['e' + str(i)])
+        return vector(tuple(list1))
+    elif type(v) == 'matrix' and type(u) == 'matrix':
+        if v.dimension != u.dimension:
+            return 'DNE dimensions differ'
+        for i in range(v.__dict__):
+            list1 =[]
+            for j in range(v.v0.__dict__):
+                list1.append(v.__dict__['v' + str(i)].__dict__['e' + str(j)] + u.__dict__['v' + str(i)].__dict__['e' + str(j)])
+            list2.append(vector(tuple(list1)))
+        return matrix(tuple(list2))
+    else:
+        return 'DNE types differ/unsuported'
+    #adds two vectors or matrices
+    
+def scalarmult(s,v):
+    list1 = []
+    list2 = []
+    if type(v) == 'vector' and (type(s) == 'int' or type(s) == 'float'):
+        for i in range(v.__dict__):
+            list1.append(s * v.__dict__['e' + str(i)])
+        return vector(tuple(list1))
+    elif type(v) == 'matrix' and (type(s) == 'int' or type(s) == 'float'):
+        for i in range(v.__dict__):
+            list1 =[]
+            for j in range(v.v0.__dict__):
+                list1.append(s * v.__dict__['v' + str(i)].__dict__['e' + str(j)])
+            list2.append(vector(tuple(list1)))
+        return matrix(tuple(list2))
+    #multiplies a vector or matrix by a scalar
+
+    
+def subtract(v,u):
+    return add(v,scalarmult(-1,u))
+    #subtracts two vectors or matrices
+
+def vectdist(v,u):
+    return mag(subtract(v,u))
+    #gives the distance between two vectors
+
 
 
 
