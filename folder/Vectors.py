@@ -144,17 +144,33 @@ def dot(v,u):
 def matrixmult(M,N):
     list1 = []
     list2 = []
-    if M.v0.length - 1 == len(N.__dict__.items()):
-        for i in range(len(M.__dict__)):
-            list1 = []
-            for j in range(len(N.__dict__)):
-                list1.append(dot(M.__dict__['v' + str(i)],N.trans().__dict__['v' + str(j)]))
-            list1.append('row')
-            list2.append(vector(tuple(list1)))
-        return matrix(tuple(list2))
-    else:
-        return 'DNE'
-    #multiplies two matrixes
+    if type(M) == matrix and type(N) == matrix:
+        if M.v0.length - 1 == len(N.__dict__.items()):
+            for i in range(len(M.__dict__)):
+                list1 = []
+                for j in range(len(N.__dict__)):
+                    list1.append(dot(M.__dict__['v' + str(i)],N.trans().__dict__['v' + str(j)]))
+                list1.append('row')
+                list2.append(vector(tuple(list1)))
+            return matrix(tuple(list2))
+        else:
+            return 'DNE'
+    elif type(M) == vector and type(N) == matrix:
+        if M.pose == 'row':
+            if M.length -1 == len(N.__dict__) -1:
+                for i in range(M.length - 1):
+                    list1.append(dot(N.__dict__['v' + str(i)],M))
+                list1.append('row')
+                return vector(tuple(list1))
+    elif type(M) == matrix and type(N) == vector:
+        if N.pose == 'column':
+            if N.length -1 == len(M.__dict__) -1:
+                for i in range(N.length - 1):
+                    list1.append(dot(M.__dict__['v' + str(i)],N.trans()))
+                list1.append('column')
+                return vector(tuple(list1))
+
+    #multiplies two matrixes or a matrix and a vector
         
     
 def angle(v,u):
