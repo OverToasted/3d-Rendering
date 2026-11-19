@@ -40,7 +40,7 @@ class vector:
                 length += len(value)
             else:
                 length += 1  
-        self.length = length
+        self.length = length -1
         
 
         if self.pose != 'row' and self.pose != 'column':
@@ -110,6 +110,7 @@ class matrix:
                       
 
 def mag(v):
+    #print(v)
     sumand = 0
     for index, i in enumerate(v.comp):
         if index != len(v.comp)-1:
@@ -141,6 +142,22 @@ def dot(v,u):
 #gives the dot product
 
 
+def cross(v,u):
+    list1 = []
+    if v.length == u.length:
+        #print(v.length)
+        if v.length == 3:
+            list1.append(v.e1*u.e2 - v.e2*u.e1)
+            list1.append(v.e2*u.e0 - v.e0*u.e2)
+            list1.append(v.e0*u.e1 - v.e1*u.e0)
+            list1.append('row')
+            return(vector(tuple(list1)))
+        else:
+            return 'DNE cross product only defined in 3 dimensions'
+    else:
+        return 'DNE vectors are not the same length'
+#gives the cross product
+    
 def matrixmult(M,N):
     list1 = []
     list2 = []
@@ -181,8 +198,13 @@ def angle(v,u):
 def add(v,u):
     list1 = []
     list2 = []
+    #print(v)
+    #print(u)
     if type(v) == vector and type(u) == vector:
         if v.length != u.length:
+            print(v)
+            print(u)
+            
             return 'DNE lengths differ'
         for i in range(len(v.__dict__)-3):
             list1.append(v.__dict__['e' + str(i)] + u.__dict__['e' + str(i)])
@@ -201,6 +223,7 @@ def add(v,u):
     else:
         return 'DNE types differ/unsuported'
     #adds two vectors or matrices
+
     
 def scalarmult(s,v):
     list1 = []
