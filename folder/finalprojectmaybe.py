@@ -5,9 +5,12 @@ from pynput import keyboard
 import turtle as tt
 
 turt = tt.Turtle()
+turt.hideturtle()
+screen = tt.Screen()
 turt.speed(0)
 turt.up()
-screen = tt.Screen()
+
+
     
 #root = tk.Tk()
 #root.title('thingy')
@@ -17,7 +20,7 @@ screen = tt.Screen()
     #for
 
 CamPos = v.vector(100,100,50,'row')
-CamAng = v.vector(0,0,'row')
+CamAng = v.vector(0,m.pi/2,'row')
 #spherical coordinates for a unit vector
 CamPoint = v.vector(0,0,0,'row')
 #unit vector where cam points
@@ -38,7 +41,7 @@ def UpdateCamPoint():
     CamPoint = v.vector(m.cos(CamAng.e0)*m.sin(CamAng.e1),m.sin(CamAng.e0)*m.sin(CamAng.e1),m.cos(CamAng.e1),'row')
     Vector1 = v.vector(m.cos(CamAng.e0)*m.sin(CamAng.e1 + m.pi/2),m.sin(CamAng.e0)*m.sin(CamAng.e1 + m.pi/2),m.cos(CamAng.e1 + m.pi/2),'row')
     CrossCam = v.cross(Vector1,CamPoint)
-    print(CamPoint.comp)
+    #print(CamPoint.comp)
     #print(Vector1.comp)
     #print(CrossCam.comp)
     
@@ -46,27 +49,44 @@ UpdateCamPoint()
 
 
 def UpdateImage():
+    global turt
+    global CamPos
+    global CamPoint
+    turt.hideturtle()
     screen.reset()
+    turt.hideturtle()
     screen.tracer(0)
     ObjectFile = open('PythonProjectData.txt')
-    for line in ObjectFile:
+    for index1,line in enumerate(ObjectFile):
         linelist = line.split(',')
         #print(linelist)
         linelist[-1] = linelist[-1][0:-1]
         #print(linelist)
         #print('hi')
-        if len(linelist) == 1:
-            print('')
-        else:
+        if len(linelist) != 1:
             for index,value in enumerate(linelist):
+                #print(value)
                 linelist[index] = float(value)
             #print(tuple(linelist))
             linelist.append('row')
             linelist = v.vector(tuple(linelist))
             #print(linelist)
-            turt.goto(2*v.vectdist(CamPos,linelist)*m.cos(v.angle(CamPoint,linelist))*m.tan(CamFOVSide),2*v.vectdist(CamPos,linelist)*m.cos(v.angle(CamPoint,linelist))*m.tan(CamFOVVertical))
-            turt.down()
+            p = v.subtract(linelist,CamPos)
+            c = v.subtract(p,v.scalarmult(v.mag(p)*m.cos(v.angle(p,CamPoint)),CamPoint))
+            print(c.comp)
+            if index1 == 0:
+                turt.up()
+                #turt.stamp()
+                turt.goto(c.e0,c.e1)
+            else:
+                turt.down()
+                turt.stamp()
+                turt.goto(c.e0,c.e1)
+                
+
+            #turt.goto(2*v.vectdist(CamPos,linelist)*m.cos(v.angle(CamPoint,linelist))*m.tan(CamFOVSide),2*v.vectdist(CamPos,linelist)*m.cos(v.angle(CamPoint,linelist))*m.tan(CamFOVVertical)
             screen.update()
+            
         
 UpdateImage()
 

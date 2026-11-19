@@ -204,7 +204,6 @@ def add(v,u):
         if v.length != u.length:
             print(v)
             print(u)
-            
             return 'DNE lengths differ'
         for i in range(len(v.__dict__)-3):
             list1.append(v.__dict__['e' + str(i)] + u.__dict__['e' + str(i)])
