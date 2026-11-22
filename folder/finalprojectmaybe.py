@@ -20,7 +20,7 @@ turt.up()
     #for
 
 CamPos = v.vector(100,100,50,'row')
-CamAng = v.vector(0,m.pi/2,'row')
+CamAng = v.vector(0,m.pi/2,0,'row')
 #spherical coordinates for a unit vector
 CamPoint = v.vector(0,0,0,'row')
 #unit vector where cam points
@@ -28,19 +28,22 @@ CrossCam = v.vector(0,0,0,'row')
 #vector pointing perpendicular to CamPoint
 CamFOVSide = m.pi/4
 CamFOVVertical = m.pi/6
-CamXSensitivity = 10
+CamXSensitivity = 1
 #how fast the camera moves horizontally
-CamYSensitivity = 10
+CamYSensitivity = 1
 #hot fast the camera moves vertically
 
 
 def UpdateCamPoint():
     global CamPoint
     global CamAng
-    global CrossCam
+    global CrossX
+    global CrossY
     CamPoint = v.vector(m.cos(CamAng.e0)*m.sin(CamAng.e1),m.sin(CamAng.e0)*m.sin(CamAng.e1),m.cos(CamAng.e1),'row')
     Vector1 = v.vector(m.cos(CamAng.e0)*m.sin(CamAng.e1 + m.pi/2),m.sin(CamAng.e0)*m.sin(CamAng.e1 + m.pi/2),m.cos(CamAng.e1 + m.pi/2),'row')
-    CrossCam = v.cross(Vector1,CamPoint)
+    Vector2 = v.vector(m.cos(CamAng.e0 + m.pi/2)*m.sin(CamAng.e1),m.sin(CamAng.e0 + m.pi/2)*m.sin(CamAng.e1),m.cos(CamAng.e1),'row')
+    CrossX = v.cross(Vector1,CamPoint)
+    CrossY = v.cross(Vector2,CamPoint)
     #print(CamPoint.comp)
     #print(Vector1.comp)
     #print(CrossCam.comp)
@@ -52,6 +55,8 @@ def UpdateImage():
     global turt
     global CamPos
     global CamPoint
+    global CrossX
+    global CrossY
     turt.hideturtle()
     screen.reset()
     turt.hideturtle()
@@ -71,17 +76,48 @@ def UpdateImage():
             linelist.append('row')
             linelist = v.vector(tuple(linelist))
             #print(linelist)
-            p = v.subtract(linelist,CamPos)
-            c = v.subtract(p,v.scalarmult(v.mag(p)*m.cos(v.angle(p,CamPoint)),CamPoint))
-            print(c.comp)
+            Diff = v.subtract(CamPos,linelist)
+            Cross = v.add(CrossX,CrossY)
+            d = 1
+            x = 0
+            for iteration in range(1,10):
+                difference1 = v.mag(Diff) - v.mag(v.add(v.scalarmult(d,CamPoint),v.scalarmult(m.sqrt(v.mag(Diff)**2 - d**2),Cross))) 
+                if difference1 == 0:
+                    break
+                if difference1 < 0:
+                    d += difference1/iteration
+                elif difference1 > 0:
+                    d += -difference1/iteration
+            #print(str(difference1) +' '+'hi')
+            for iteration in range(1,10):
+                #print(iteration)
+                #print(x)
+        
+                difference2 = v.mag(v.subtract(Diff,v.add(v.scalarmult(d,CamPoint),v.add(v.scalarmult(x,CrossX),v.scalarmult(m.sqrt(difference1**2-x**2),CrossY))))) 
+                if difference2 == 0:
+                    break
+                if iteration == 1:
+                    x += difference1/2
+                    difference3 = v.mag(v.subtract(Diff,v.add(v.scalarmult(d,CamPoint),v.add(v.scalarmult(x,CrossX),v.scalarmult(m.sqrt(difference1**2-x**2),CrossY))))) 
+                    x = 0
+                    difference4 = difference2 - difference3
+                    x += difference4/iteration
+                else:
+                    x += difference4/iteration
+                    difference3 = v.mag(v.subtract(Diff,v.add(v.scalarmult(d,CamPoint),v.add(v.scalarmult(x,CrossX),v.scalarmult(m.sqrt(difference1**2-x**2),CrossY))))) 
+                    x += -difference4/iteration
+                    difference4 = difference2 - difference3
+                    x += difference4/iteration
+            y = m.sqrt(difference1**2 - x**2)
+            
             if index1 == 0:
                 turt.up()
                 #turt.stamp()
-                turt.goto(c.e0,c.e1)
+                turt.goto(x,y)
             else:
                 turt.down()
-                turt.stamp()
-                turt.goto(c.e0,c.e1)
+                #turt.stamp()
+                turt.goto(x,y)
                 
 
             #turt.goto(2*v.vectdist(CamPos,linelist)*m.cos(v.angle(CamPoint,linelist))*m.tan(CamFOVSide),2*v.vectdist(CamPos,linelist)*m.cos(v.angle(CamPoint,linelist))*m.tan(CamFOVVertical)
@@ -111,7 +147,7 @@ def MoveCamRight():
     global CamPos
     global CamPoint
     #print(CamPos.comp)
-    CamPos = v.add(CamPos,v.scalarmult(-10,CrossCam))
+    CamPos = v.add(CamPos,v.scalarmult(-10,CrossX))
     #print(CamPos.comp)
     UpdateCamPoint()
     UpdateImage()
@@ -120,7 +156,7 @@ def MoveCamLeft():
     global CamPos
     global CamPoint
     #print(CamPos.comp)
-    CamPos = v.add(CamPos,v.scalarmult(10,CrossCam))
+    CamPos = v.add(CamPos,v.scalarmult(10,CrossX))
     #print(CamPos.comp)
     UpdateCamPoint()
     UpdateImage()
